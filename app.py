@@ -489,10 +489,14 @@ def check_weight_status(weight, breed_key):
     if breed_key not in CAT_BREEDS:
         breed_key = "mixed"
     min_weight, max_weight = CAT_BREEDS[breed_key]["weight"]
-    if weight < min_weight * 0.9:
+    
+    # Check if underweight (below minimum)
+    if weight < min_weight:
         return "underweight"
-    elif weight > max_weight * 1.1:
+    # Check if overweight (above maximum)
+    elif weight > max_weight:
         return "overweight"
+    # Within healthy range
     else:
         return "healthy"
 
