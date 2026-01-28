@@ -48,6 +48,14 @@
                     <input type="number" id="weight" name="weight" step="0.1" min="0.5" max="15" required>
                 </div>
                 
+                <div class="form-group">
+                    <label for="spayed_neutered">{{ ui.spayed_neutered[lang] }}</label>
+                    <select id="spayed_neutered" name="spayed_neutered" required>
+                        <option value="no">{{ ui.no[lang] }}</option>
+                        <option value="yes">{{ ui.yes[lang] }}</option>
+                    </select>
+                </div>
+                
                 <button type="submit" class="btn-primary">{{ ui.calculate[lang] }}</button>
             </form>
         </div>
@@ -102,7 +110,17 @@
             
             <div class="result-card">
                 <h3>🍽️ {{ ui.feeding[lang] }}</h3>
-                <p>{{ result.feeding }}</p>
+                <ul class="feeding-list">
+                    <li><strong>{{ ui.feeding_frequency[lang] }}</strong> {{ result.feeding.frequency }}</li>
+                    <li><strong>{{ ui.food_type[lang] }}</strong> {{ result.feeding.food_type }}</li>
+                    <li><strong>{{ ui.daily_calories[lang] }}</strong> {{ result.feeding.calories }}</li>
+                    <li><strong>{{ ui.daily_grams[lang] }}</strong> {{ result.feeding.grams }}</li>
+                </ul>
+            </div>
+            
+            <div class="result-card">
+                <h3>🎮 {{ ui.games[lang] }}</h3>
+                <p class="games-section">{{ result.games }}</p>
             </div>
             
             <div class="result-card">
@@ -125,12 +143,14 @@
                 <p>{{ result.info.vet }}</p>
             </div>
             
+            {% if result.spay_neuter %}
             <div class="result-card">
                 <h3>✂️ {{ ui.spay_neuter[lang] }}</h3>
                 <p><strong>{% if lang=="en" %}Timing:{% else %}Momento:{% endif %}</strong> {{ result.spay_neuter.timing }}</p>
                 <p><strong>{% if lang=="en" %}Benefits:{% else %}Beneficios:{% endif %}</strong> {{ result.spay_neuter.benefits }}</p>
                 <p><strong>{% if lang=="en" %}Recovery:{% else %}Recuperación:{% endif %}</strong> {{ result.spay_neuter.recovery }}</p>
             </div>
+            {% endif %}
         </div>
         {% endif %}
         {% endif %}
