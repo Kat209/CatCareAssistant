@@ -11,6 +11,9 @@ UI_TEXT = {
     "months": {"en": "months", "es": "meses"},
     "breed": {"en": "Breed", "es": "Raza"},
     "weight": {"en": "Weight (kg)", "es": "Peso (kg)"},
+    "spayed_neutered": {"en": "Is your cat spayed/neutered?", "es": "¿Está esterilizado tu gato?"},
+    "yes": {"en": "Yes", "es": "Sí"},
+    "no": {"en": "No", "es": "No"},
     "calculate": {"en": "Calculate", "es": "Calcular"},
     "human_age": {"en": "Human age equivalent:", "es": "Edad humana equivalente:"},
     "personality": {"en": "Personality", "es": "Personalidad"},
@@ -19,9 +22,14 @@ UI_TEXT = {
     "weight_status": {"en": "Weight Status", "es": "Estado del Peso"},
     "ideal_weight": {"en": "Ideal weight range:", "es": "Rango de peso ideal:"},
     "feeding": {"en": "Feeding Recommendations", "es": "Recomendaciones de Alimentación"},
+    "feeding_frequency": {"en": "Feeding frequency:", "es": "Frecuencia de alimentación:"},
+    "food_type": {"en": "Food type:", "es": "Tipo de comida:"},
+    "daily_calories": {"en": "Daily calories:", "es": "Calorías diarias:"},
+    "daily_grams": {"en": "Daily amount (grams):", "es": "Cantidad diaria (gramos):"},
     "vaccinations": {"en": "Vaccination Schedule", "es": "Calendario de Vacunación"},
     "deworming": {"en": "Deworming Schedule", "es": "Calendario de Desparasitación"},
     "warning_signs": {"en": "Warning Signs to Watch", "es": "Señales de Alerta"},
+    "games": {"en": "Age-Appropriate Games & Activities", "es": "Juegos y Actividades Apropiados para su Edad"},
     "spay_neuter": {"en": "Spay/Neuter Information", "es": "Información sobre Esterilización"},
     "disclaimer": {
         "en": "This info is for educational purposes and not a substitute for a veterinarian.",
@@ -73,24 +81,43 @@ CAT_BREEDS = {
     },
 }
 
-# Full Breed List for Dropdown (Alphabetical)
-ALL_BREEDS = sorted([
-    "Unknown / Mixed",
-    "Abyssinian", "Aegean", "American Bobtail", "American Curl",
-    "American Shorthair", "American Wirehair", "Balinese", "Bambino",
-    "Bengal", "Birman", "Bombay", "British Longhair", "British Shorthair",
-    "Burmese", "Burmilla", "Chartreux", "Chausie", "Colorpoint Shorthair",
-    "Cornish Rex", "Cymric", "Devon Rex", "Donskoy", "Egyptian Mau",
-    "European Burmese", "Exotic Shorthair", "German Rex", "Havana Brown",
-    "Highlander", "Himalayan", "Japanese Bobtail", "Javanese", "Khao Manee",
-    "Korat", "Kurilian Bobtail", "LaPerm", "Lykoi", "Maine Coon", "Manx",
-    "Minskin", "Munchkin", "Nebelung", "Norwegian Forest Cat", "Ocicat",
-    "Oriental Longhair", "Oriental Shorthair", "Persian", "Peterbald",
-    "Pixiebob", "Ragamuffin", "Ragdoll", "Russian Blue", "Savannah",
-    "Scottish Fold", "Selkirk Rex", "Serengeti", "Siamese", "Siberian",
-    "Singapura", "Snowshoe", "Somali", "Sphynx", "Thai", "Tonkinese",
-    "Toyger", "Turkish Angora", "Turkish Van", "Ukrainian Levkoy", "York Chocolate"
-])
+# Full Breed List for Dropdown (with Spanish translations and Unknown/Mixed at top)
+ALL_BREEDS = {
+    "en": [
+        "Unknown / Mixed",
+        "Abyssinian", "Aegean", "American Bobtail", "American Curl",
+        "American Shorthair", "American Wirehair", "Balinese", "Bambino",
+        "Bengal", "Birman", "Bombay", "British Longhair", "British Shorthair",
+        "Burmese", "Burmilla", "Chartreux", "Chausie", "Colorpoint Shorthair",
+        "Cornish Rex", "Cymric", "Devon Rex", "Donskoy", "Egyptian Mau",
+        "European Burmese", "Exotic Shorthair", "German Rex", "Havana Brown",
+        "Highlander", "Himalayan", "Japanese Bobtail", "Javanese", "Khao Manee",
+        "Korat", "Kurilian Bobtail", "LaPerm", "Lykoi", "Maine Coon", "Manx",
+        "Minskin", "Munchkin", "Nebelung", "Norwegian Forest Cat", "Ocicat",
+        "Oriental Longhair", "Oriental Shorthair", "Persian", "Peterbald",
+        "Pixiebob", "Ragamuffin", "Ragdoll", "Russian Blue", "Savannah",
+        "Scottish Fold", "Selkirk Rex", "Serengeti", "Siamese", "Siberian",
+        "Singapura", "Snowshoe", "Somali", "Sphynx", "Thai", "Tonkinese",
+        "Toyger", "Turkish Angora", "Turkish Van", "Ukrainian Levkoy", "York Chocolate"
+    ],
+    "es": [
+        "Desconocido / Mestizo",
+        "Abisinio", "Egeo", "Bobtail Americano", "American Curl",
+        "Americano de Pelo Corto", "Americano de Pelo Duro", "Balinés", "Bambino",
+        "Bengalí", "Birmano", "Bombay", "Británico de Pelo Largo", "Británico de Pelo Corto",
+        "Burmés", "Burmilla", "Chartreux", "Chausie", "Colorpoint de Pelo Corto",
+        "Cornish Rex", "Cymric", "Devon Rex", "Donskoy", "Mau Egipcio",
+        "Burmés Europeo", "Exótico de Pelo Corto", "Rex Alemán", "Havana Brown",
+        "Highlander", "Himalayo", "Bobtail Japonés", "Javanés", "Khao Manee",
+        "Korat", "Bobtail de las Kuriles", "LaPerm", "Lykoi", "Maine Coon", "Manx",
+        "Minskin", "Munchkin", "Nebelung", "Gato del Bosque de Noruega", "Ocicat",
+        "Oriental de Pelo Largo", "Oriental de Pelo Corto", "Persa", "Peterbald",
+        "Pixiebob", "Ragamuffin", "Ragdoll", "Azul Ruso", "Savannah",
+        "Scottish Fold", "Selkirk Rex", "Serengeti", "Siamés", "Siberiano",
+        "Singapura", "Snowshoe", "Somalí", "Esfinge", "Thai", "Tonkinés",
+        "Toyger", "Angora Turco", "Van Turco", "Levkoy Ucraniano", "York Chocolate"
+    ]
+}
 
 # Cat Info by Life Stage
 CAT_INFO = {
@@ -105,7 +132,7 @@ CAT_INFO = {
             "personality": "Juguetones, curiosos y llenos de energía. Aprendiendo habilidades sociales y explorando su entorno.",
             "health": "Vigilar parásitos, infecciones y desarrollo adecuado. Ojos, oídos y dientes necesitan revisión regular.",
             "vet": "Chequeos cada 3–4 semanas durante vacunación. Primera visita a las 6-8 semanas.",
-            "warning_signs": "⚠️ Letargo, no come, diarrhea por más de 24h, dificultad para respirar, secreción ocular o nasal, no aumenta de peso"
+            "warning_signs": "⚠️ Letargo, no come, diarrea por más de 24h, dificultad para respirar, secreción ocular o nasal, no aumenta de peso"
         }
     },
     "adult": {
@@ -150,11 +177,66 @@ DEWORMING_SCHEDULE = {
     "es": {"gatitos": "Cada 2 semanas desde las 2-8 semanas, luego mensual hasta los 6 meses", "adultos": "Cada 3-6 meses para gatos de exterior, cada 6-12 meses para interiores", "mayores": "Cada 3-6 meses, ajustado según estilo de vida y salud"}
 }
 
-# Feeding Recommendations
+# Feeding Recommendations (detailed with bullet points)
 FEEDING_RECOMMENDATIONS = {
-    "kitten": {"en": "Feed 3-4 times daily. High-protein kitten food. Approximately 200-250 calories per day per kg of body weight.", "es": "Alimentar 3-4 veces al día. Comida para gatitos alta en proteínas. Aproximadamente 200-250 calorías por día por kg de peso corporal."},
-    "adult": {"en": "Feed 2 times daily. Adult cat food with balanced nutrition. Approximately 200-300 calories total per day.", "es": "Alimentar 2 veces al día. Comida para gatos adultos con nutrición balanceada. Aproximadamente 200-300 calorías totales por día."},
-    "senior": {"en": "Feed 2-3 times daily. Senior cat food (easier to digest, joint support). Approximately 180-220 calories per day.", "es": "Alimentar 2-3 veces al día. Comida para gatos mayores. Aproximadamente 180-220 calorías por día."}
+    "kitten": {
+        "en": {
+            "frequency": "3-4 times daily",
+            "food_type": "High-protein kitten food (dry or wet)",
+            "calories": "200-250 calories per day per kg of body weight",
+            "grams": "50-75 grams per kg of body weight (varies by food brand)"
+        },
+        "es": {
+            "frequency": "3-4 veces al día",
+            "food_type": "Comida para gatitos alta en proteínas (seca o húmeda)",
+            "calories": "200-250 calorías por día por kg de peso corporal",
+            "grams": "50-75 gramos por kg de peso corporal (varía según la marca)"
+        }
+    },
+    "adult": {
+        "en": {
+            "frequency": "2 times daily",
+            "food_type": "Adult cat food with balanced nutrition",
+            "calories": "200-300 calories total per day (adjust for activity level)",
+            "grams": "40-60 grams per day (for average 4-5kg cat)"
+        },
+        "es": {
+            "frequency": "2 veces al día",
+            "food_type": "Comida para gatos adultos con nutrición balanceada",
+            "calories": "200-300 calorías totales por día (ajustar según actividad)",
+            "grams": "40-60 gramos por día (para gato promedio de 4-5kg)"
+        }
+    },
+    "senior": {
+        "en": {
+            "frequency": "2-3 times daily (smaller portions)",
+            "food_type": "Senior cat food (easier to digest, joint support)",
+            "calories": "180-220 calories per day",
+            "grams": "35-50 grams per day (for average senior cat)"
+        },
+        "es": {
+            "frequency": "2-3 veces al día (porciones más pequeñas)",
+            "food_type": "Comida para gatos mayores (más fácil de digerir, apoyo articular)",
+            "calories": "180-220 calorías por día",
+            "grams": "35-50 gramos por día (para gato mayor promedio)"
+        }
+    }
+}
+
+# Age-Appropriate Games and Activities
+GAMES_ACTIVITIES = {
+    "kitten": {
+        "en": "🎾 Chasing toys (feather wands, balls) • 🧶 String and ribbon play (supervised) • 📦 Exploring boxes and tunnels • 🎯 Laser pointer games (always end with catchable toy) • 🧩 Simple puzzle feeders • 👥 Socialization with people and other pets • 🪴 Safe climbing structures • 💤 Rest periods between play (kittens tire quickly)",
+        "es": "🎾 Perseguir juguetes (varitas con plumas, pelotas) • 🧶 Jugar con cuerdas y cintas (supervisado) • 📦 Explorar cajas y túneles • 🎯 Juegos con puntero láser (siempre terminar con juguete capturable) • 🧩 Comederos tipo puzzle simples • 👥 Socialización con personas y otras mascotas • 🪴 Estructuras seguras para trepar • 💤 Períodos de descanso entre juegos (los gatitos se cansan rápido)"
+    },
+    "adult": {
+        "en": "🎣 Interactive fishing rod toys • 🏃 Chase games (2-3 sessions of 10-15 min daily) • 🧠 Puzzle feeders and treat-dispensing toys • 🎾 Ball and mouse toys • 📦 Cardboard boxes for hiding • 🌿 Cat grass and safe plants to explore • 🧗 Cat trees and vertical spaces • 🎯 Hunting simulation games • 🪟 Window perches for bird watching",
+        "es": "🎣 Juguetes interactivos tipo caña de pescar • 🏃 Juegos de persecución (2-3 sesiones de 10-15 min diarios) • 🧠 Comederos tipo puzzle y juguetes dispensadores de premios • 🎾 Pelotas y ratones de juguete • 📦 Cajas de cartón para esconderse • 🌿 Hierba gatera y plantas seguras para explorar • 🧗 Árboles para gatos y espacios verticales • 🎯 Juegos de simulación de caza • 🪟 Perchas en ventanas para observar pájaros"
+    },
+    "senior": {
+        "en": "🐢 Gentle play sessions (5-10 minutes, multiple times daily) • 🧸 Soft toys they can bat around • 🧠 Food puzzles (easier difficulty) • 🪟 Comfortable window perches • 🌞 Warm, accessible resting spots • 🤲 Gentle petting and grooming sessions • 📻 Calm background sounds • 🎾 Slow-moving toys • ⚠️ Avoid high jumps - provide ramps/steps",
+        "es": "🐢 Sesiones de juego suaves (5-10 minutos, varias veces al día) • 🧸 Juguetes suaves que puedan golpear • 🧠 Rompecabezas de comida (dificultad más fácil) • 🪟 Perchas cómodas en ventanas • 🌞 Lugares cálidos y accesibles para descansar • 🤲 Sesiones suaves de caricias y aseo • 📻 Sonidos de fondo tranquilos • 🎾 Juguetes de movimiento lento • ⚠️ Evitar saltos altos - proporcionar rampas/escalones"
+    }
 }
 
 # Spay/Neuter Info
@@ -164,9 +246,10 @@ SPAY_NEUTER_INFO = {
 }
 
 # Helper Functions
-def normalize_breed_key(breed_name):
+def normalize_breed_key(breed_name, lang="en"):
     """Convert breed display name to dictionary key"""
-    breed_map = {
+    # English to key mapping
+    breed_map_en = {
         "Unknown / Mixed": "mixed",
         "Maine Coon": "maine_coon",
         "British Shorthair": "british_shorthair",
@@ -178,7 +261,25 @@ def normalize_breed_key(breed_name):
         "Sphynx": "sphynx",
         "Bombay": "bombay"
     }
-    return breed_map.get(breed_name, "mixed")
+    
+    # Spanish to key mapping
+    breed_map_es = {
+        "Desconocido / Mestizo": "mixed",
+        "Maine Coon": "maine_coon",
+        "Británico de Pelo Corto": "british_shorthair",
+        "Siamés": "siamese",
+        "Persa": "persian",
+        "Ragdoll": "ragdoll",
+        "Bengalí": "bengal",
+        "Abisinio": "abyssinian",
+        "Esfinge": "sphynx",
+        "Bombay": "bombay"
+    }
+    
+    if lang == "es":
+        return breed_map_es.get(breed_name, "mixed")
+    else:
+        return breed_map_en.get(breed_name, "mixed")
 
 def cat_to_human_age(years, months=0):
     total_months = years * 12 + months
@@ -267,11 +368,12 @@ def home():
             name = request.form["name"]
             years = int(request.form.get("years", 0))
             months = int(request.form.get("months", 0))
-            breed = request.form.get("breed", "Unknown / Mixed")
+            breed = request.form.get("breed", ALL_BREEDS[lang][0])
             weight = float(request.form.get("weight", 0))
+            is_spayed = request.form.get("spayed_neutered", "no") == "yes"
             
             # Convert breed name to key for lookup
-            breed_key = normalize_breed_key(breed)
+            breed_key = normalize_breed_key(breed, lang)
             
             human_age = cat_to_human_age(years, months)
             stage = get_life_stage(years, months)
@@ -299,9 +401,11 @@ def home():
                 "ideal_weight": f"{min_w} - {max_w} kg",
                 "info": info,
                 "feeding": FEEDING_RECOMMENDATIONS[stage][lang],
+                "games": GAMES_ACTIVITIES[stage][lang],
                 "vaccination": get_vaccination_info(years, months, lang),
                 "deworming": get_deworming_info(years, months, lang),
-                "spay_neuter": SPAY_NEUTER_INFO[lang]
+                "is_spayed": is_spayed,
+                "spay_neuter": SPAY_NEUTER_INFO[lang] if not is_spayed else None
             }
         except Exception as e:
             import traceback
@@ -314,8 +418,8 @@ def home():
         lang=lang,
         result=result,
         ui=UI_TEXT,
-        breeds=CAT_BREEDS,        # for medical logic
-        all_breeds=ALL_BREEDS     # for dropdown
+        breeds=CAT_BREEDS,
+        all_breeds=ALL_BREEDS[lang]
     )
 
 if __name__ == "__main__":
