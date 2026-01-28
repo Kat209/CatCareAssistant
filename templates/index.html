@@ -5,155 +5,101 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ ui.title[lang] }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Add Choices.js library if you want searchable dropdown -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
 </head>
 <body>
-    <div class="lang-switch">
-        <a href="/?lang=en" class="lang-link {% if lang == 'en' %}active{% endif %}">🇬🇧 English</a> |
-        <a href="/?lang=es" class="lang-link {% if lang == 'es' %}active{% endif %}">🇪🇸 Español</a>
+<div class="lang-switch">
+    <a href="/?lang=en" class="lang-link {% if lang == 'en' %}active{% endif %}">🇬🇧 English</a> |
+    <a href="/?lang=es" class="lang-link {% if lang == 'es' %}active{% endif %}">🇪🇸 Español</a>
+</div>
+
+<div class="container">
+    <h1>🐱 {{ ui.title[lang] }}</h1>
+
+    <div class="form-card">
+        <form method="POST" action="/?lang={{ lang }}">
+            <div class="form-group">
+                <label for="name">{{ ui.cat_name[lang] }}</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="years">{{ ui.age[lang] }} ({{ ui.years[lang] }})</label>
+                    <input type="number" id="years" name="years" min="0" max="25" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="months">{{ ui.age[lang] }} ({{ ui.months[lang] }})</label>
+                    <input type="number" id="months" name="months" min="0" max="11" value="0">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="breed">{{ ui.breed[lang] }}</label>
+                <select id="breed" name="breed" required>
+                    {% for breed_key in all_breeds %}
+                        <option value="{{ breed_key }}">{{ breeds[breed_key][lang] }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="weight">{{ ui.weight[lang] }}</label>
+                <input type="number" id="weight" name="weight" step="0.1" min="0.5" max="15" required>
+            </div>
+
+            <button type="submit" class="btn-primary">{{ ui.calculate[lang] }}</button>
+        </form>
     </div>
 
-    <div class="container">
-        <h1>🐱 {{ ui.title[lang] }}</h1>
-
-        <div class="form-card">
-            <form method="POST" action="/?lang={{ lang }}">
-                <div class="form-group">
-                    <label for="name">{{ ui.cat_name[lang] }}</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="years">{{ ui.age[lang] }} ({{ ui.years[lang] }})</label>
-                        <input type="number" id="years" name="years" min="0" max="25" value="0" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="months">{{ ui.age[lang] }} ({{ ui.months[lang] }})</label>
-                        <input type="number" id="months" name="months" min="0" max="11" value="0">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="breed">{{ ui.breed[lang] }}</label>
-                    <select id="breed" name="breed" required>
-                        <!-- Unknown / Mixed always first -->
-                        <option value="Unknown / Mixed">
-                            {% if lang == "es" %}Desconocido / Mestizo{% else %}Unknown / Mixed{% endif %}
-                        </option>
-
-                        <!-- All other breeds alphabetically -->
-                        {% for breed in all_breeds %}
-                            {% if breed != "Unknown / Mixed" %}
-                                <option value="{{ breed }}">{{ breed }}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="weight">{{ ui.weight[lang] }}</label>
-                    <input type="number" id="weight" name="weight" step="0.1" min="0.5" max="15" required>
-                </div>
-
-                <button type="submit" class="btn-primary">{{ ui.calculate[lang] }}</button>
-            </form>
+    {% if result %}
+    {% if result.error %}
+        <div class="result-card warning-card">
+            <h3>❌ Error</h3>
+            <p>{{ result.error_message }}</p>
         </div>
-
-        {% if result %}
-            {% if result.error %}
-                <div class="result-card warning-card">
-                    <h3>❌ Error</h3>
-                    <p>{{ result.error_message }}</p>
+    {% else %}
+        <div class="result-section">
+            <div class="result-card profile-card">
+                <h2>{{ result.name }} 🐾</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">{{ ui.age[lang] }}:</span>
+                        <span class="value">{{ result.years }} {{ ui.years[lang] }}{% if result.months > 0 %}, {{ result.months }} {{ ui.months[lang] }}{% endif %}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">{{ ui.human_age[lang] }}</span>
+                        <span class="value highlight">{{ result.human_age }} {{ ui.years[lang] }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">{{ ui.breed[lang] }}:</span>
+                        <span class="value">{{ result.breed }}</span>
+                    </div>
                 </div>
-            {% else %}
-                <div class="result-section">
-
-                    <div class="result-card profile-card">
-                        <h2>{{ result.name }} 🐾</h2>
-                        <div class="info-grid">
-                            <div class="info-item">
-                                <span class="label">{{ ui.age[lang] }}:</span>
-                                <span class="value">
-                                    {{ result.years }} {{ ui.years[lang] }}
-                                    {% if result.months > 0 %}, {{ result.months }} {{ ui.months[lang] }}{% endif %}
-                                </span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">{{ ui.human_age[lang] }}</span>
-                                <span class="value highlight">{{ result.human_age }} {{ ui.years[lang] }}</span>
-                            </div>
-                            <div class="info-item">
-                                <span class="label">{{ ui.breed[lang] }}:</span>
-                                <span class="value">{{ result.breed }}</span>
-                            </div>
-                        </div>
-                        <div class="breed-description">
-                            <p><em>{{ result.breed_description }}</em></p>
-                        </div>
-                    </div>
-
-                    <div class="result-card weight-card">
-                        <h3>⚖️ {{ ui.weight_status[lang] }}</h3>
-                        <div class="weight-info">
-                            <p class="current-weight">
-                                {{ ui.weight[lang] }}: <strong>{{ result.weight }} kg</strong>
-                            </p>
-                            <p class="ideal-weight">
-                                {{ ui.ideal_weight[lang] }} <strong>{{ result.ideal_weight }}</strong>
-                            </p>
-                            <p class="weight-status {{ result.weight_status }}">
-                                {{ result.weight_message }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>🎭 {{ ui.personality[lang] }}</h3>
-                        <p>{{ result.info.personality }}</p>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>💊 {{ ui.health[lang] }}</h3>
-                        <p>{{ result.info.health }}</p>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>🍽️ {{ ui.feeding[lang] }}</h3>
-                        <p>{{ result.feeding }}</p>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>💉 {{ ui.vaccinations[lang] }}</h3>
-                        <p>{{ result.vaccination }}</p>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>🐛 {{ ui.deworming[lang] }}</h3>
-                        <p>{{ result.deworming }}</p>
-                    </div>
-
-                    <div class="result-card warning-card">
-                        <h3>⚠️ {{ ui.warning_signs[lang] }}</h3>
-                        <p>{{ result.info.warning_signs }}</p>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>🏥 {{ ui.vet[lang] }}</h3>
-                        <p>{{ result.info.vet }}</p>
-                    </div>
-
-                    <div class="result-card">
-                        <h3>✂️ {{ ui.spay_neuter[lang] }}</h3>
-                        <p><strong>{% if lang=="en" %}Timing:{% else %}Momento:{% endif %}</strong> {{ result.spay_neuter.timing }}</p>
-                        <p><strong>{% if lang=="en" %}Benefits:{% else %}Beneficios:{% endif %}</strong> {{ result.spay_neuter.benefits }}</p>
-                        <p><strong>{% if lang=="en" %}Recovery:{% else %}Recuperación:{% endif %}</strong> {{ result.spay_neuter.recovery }}</p>
-                    </div>
-
+                <div class="breed-description">
+                    <p><em>{{ result.breed_description }}</em></p>
                 </div>
-            {% endif %}
-        {% endif %}
+            </div>
 
-        <p class="disclaimer">⚠️ {{ ui.disclaimer[lang] }}</p>
-    </div>
+            <div class="result-card weight-card">
+                <h3>⚖️ {{ ui.weight_status[lang] }}</h3>
+                <p class="current-weight">{{ ui.weight[lang] }}: <strong>{{ result.weight }} kg</strong></p>
+                <p class="ideal-weight">{{ ui.ideal_weight[lang] }} <strong>{{ result.ideal_weight }}</strong></p>
+                <p class="weight-status {{ result.weight_status }}">{{ result.weight_message }}</p>
+            </div>
+        </div>
+    {% endif %}
+    {% endif %}
+
+    <p class="disclaimer">⚠️ {{ ui.disclaimer[lang] }}</p>
+</div>
+
+<!-- Choices.js for searchable dropdown -->
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+<script>
+    const breedSelect = document.getElementById('breed');
+    const choices = new Choices(breedSelect, { searchEnabled: true, itemSelectText: '' });
+</script>
 </body>
 </html>
