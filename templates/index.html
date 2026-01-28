@@ -34,13 +34,14 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="breed">{{ ui.breed[lang] }}</label>
-                    <select id="breed" name="breed" required>
-                        {% for breed_key, breed_info in breeds.items() %}
-                        <option value="{{ breed_key }}">{{ breed_info[lang] }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
+    <label for="breed">{{ ui.breed[lang] }}</label>
+    <select id="breed" name="breed" required>
+        {% for breed in all_breeds %}
+        <option value="{{ breed }}">{{ breed }}</option>
+        {% endfor %}
+    </select>
+</div>
+
                 
                 <div class="form-group">
                     <label for="weight">{{ ui.weight[lang] }}</label>
