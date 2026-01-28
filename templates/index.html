@@ -110,10 +110,24 @@
             
             <div class="result-card">
                 <h3>🍽️ {{ ui.feeding[lang] }}</h3>
-                <p><strong>{{ ui.feeding_frequency[lang] }}</strong> {{ result.feeding.frequency }}</p>
-                <p><strong>{{ ui.food_type[lang] }}</strong> {{ result.feeding.food_type }}</p>
-                <p><strong>{{ ui.daily_calories[lang] }}</strong> {{ result.feeding.calories }}</p>
-                <p><strong>{{ ui.daily_grams[lang] }}</strong> {{ result.feeding.grams }}</p>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="label">{{ ui.feeding_frequency[lang] }}</span>
+                        <span class="value">{{ result.feeding.frequency }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">{{ ui.food_type[lang] }}</span>
+                        <span class="value">{{ result.feeding.food_type }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">{{ ui.daily_calories[lang] }}</span>
+                        <span class="value">{{ result.feeding.calories }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">{{ ui.daily_grams[lang] }}</span>
+                        <span class="value">{{ result.feeding.grams }}</span>
+                    </div>
+                </div>
             </div>
             
             <div class="result-card">
