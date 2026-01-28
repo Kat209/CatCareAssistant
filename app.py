@@ -67,7 +67,7 @@ CAT_BREEDS = {
                                "es": "Sin pelo, cálidos al tacto, muy cariñosos y sociales. Requiere baños regulares."}}
 }
 
-# Sorted breed list for dropdown, unknown/mixed first
+# Sorted list for dropdown, Unknown/Mixed first
 ALL_BREEDS = sorted([b for b in CAT_BREEDS.keys() if b != "Unknown / Mixed"])
 ALL_BREEDS.insert(0, "Unknown / Mixed")
 
@@ -150,14 +150,13 @@ def home():
             result = {"error": True, "error_message": str(e)}
 
     return render_template(
-    "index.html",
-    lang=lang,
-    result=result,
-    ui=UI_TEXT,
-    breeds=CAT_BREEDS,   # <- pass the full dict for the template
-    all_breeds=ALL_BREEDS  # <- optional, can use for Choices.js ordering
-)
-
+        "index.html",
+        lang=lang,
+        result=result,
+        ui=UI_TEXT,
+        breeds=CAT_BREEDS,   # <- needed for HTML dropdown
+        all_breeds=ALL_BREEDS
+    )
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7860)
