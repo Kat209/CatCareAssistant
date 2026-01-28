@@ -226,38 +226,134 @@ FEEDING_RECOMMENDATIONS = {
 def get_breed_specific_games(breed_key, stage, lang):
     """Get games tailored to breed characteristics"""
     breed_traits = {
-        "bengal": {"en": " • 🏃‍♂️ EXTRA: High-energy breed - needs vigorous daily play and climbing!", 
-                   "es": " • 🏃‍♂️ EXTRA: Raza muy energética - ¡necesita juego vigoroso diario y trepar!"},
-        "siamese": {"en": " • 🗣️ EXTRA: Very vocal and social - interactive toys and conversation!", 
-                    "es": " • 🗣️ EXTRA: Muy vocal y social - ¡juguetes interactivos y conversación!"},
-        "persian": {"en": " • 😌 EXTRA: Calm breed - prefers gentle play and quiet environments", 
-                    "es": " • 😌 EXTRA: Raza tranquila - prefiere juego suave y ambientes tranquilos"},
-        "maine_coon": {"en": " • 🦁 EXTRA: Large and playful - sturdy toys and water play!", 
-                       "es": " • 🦁 EXTRA: Grande y juguetón - ¡juguetes resistentes y juegos con agua!"},
-        "sphynx": {"en": " • 🌡️ EXTRA: Hairless - keep warm during play, loves human interaction", 
-                   "es": " • 🌡️ EXTRA: Sin pelo - mantener caliente durante el juego, ama la interacción humana"},
-        "abyssinian": {"en": " • 🔍 EXTRA: Very curious - puzzle toys and exploring new things!", 
-                       "es": " • 🔍 EXTRA: Muy curioso - ¡juguetes tipo puzzle y explorar cosas nuevas!"},
+        "bengal": {
+            "en": "🏃‍♂️ EXTRA: High-energy breed - ADD 15-30 minutes of vigorous play daily!", 
+            "es": "🏃‍♂️ EXTRA: Raza muy energética - ¡AÑADIR 15-30 minutos de juego vigoroso diario!"
+        },
+        "siamese": {
+            "en": "🗣️ EXTRA: Very vocal and social - interactive toys and conversation time!", 
+            "es": "🗣️ EXTRA: Muy vocal y social - ¡juguetes interactivos y tiempo de conversación!"
+        },
+        "persian": {
+            "en": "😌 EXTRA: Calm breed - gentle play is enough, avoid overexertion", 
+            "es": "😌 EXTRA: Raza tranquila - juego suave es suficiente, evitar exceso de ejercicio"
+        },
+        "maine_coon": {
+            "en": "🦁 EXTRA: Large and playful - sturdy toys and water play recommended!", 
+            "es": "🦁 EXTRA: Grande y juguetón - ¡juguetes resistentes y juegos con agua recomendados!"
+        },
+        "sphynx": {
+            "en": "🌡️ EXTRA: Hairless - keep warm during play, loves human interaction", 
+            "es": "🌡️ EXTRA: Sin pelo - mantener caliente durante el juego, ama la interacción humana"
+        },
+        "abyssinian": {
+            "en": "🔍 EXTRA: Very curious - puzzle toys and exploring new things daily!", 
+            "es": "🔍 EXTRA: Muy curioso - ¡juguetes tipo puzzle y explorar cosas nuevas diariamente!"
+        },
     }
     
     base_games = GAMES_ACTIVITIES[stage][lang]
     breed_addition = breed_traits.get(breed_key, {}).get(lang, "")
     
-    return base_games + breed_addition
+    # Add breed-specific note to activities list if exists
+    activities = base_games["activities"].copy()
+    if breed_addition:
+        activities.append(breed_addition)
+    
+    return {
+        "min_playtime": base_games["min_playtime"],
+        "activities": activities
+    }
 
 # Age-Appropriate Games and Activities
 GAMES_ACTIVITIES = {
     "kitten": {
-        "en": "🎾 Chasing toys (feather wands, balls) • 🧶 String and ribbon play (supervised) • 📦 Exploring boxes and tunnels • 🎯 Laser pointer games (always end with catchable toy) • 🧩 Simple puzzle feeders • 👥 Socialization with people and other pets • 🪴 Safe climbing structures • 💤 Rest periods between play (kittens tire quickly)",
-        "es": "🎾 Perseguir juguetes (varitas con plumas, pelotas) • 🧶 Jugar con cuerdas y cintas (supervisado) • 📦 Explorar cajas y túneles • 🎯 Juegos con puntero láser (siempre terminar con juguete capturable) • 🧩 Comederos tipo puzzle simples • 👥 Socialización con personas y otras mascotas • 🪴 Estructuras seguras para trepar • 💤 Períodos de descanso entre juegos (los gatitos se cansan rápido)"
+        "en": {
+            "min_playtime": "60-90 minutes per day (in short 10-15 minute sessions)",
+            "activities": [
+                "🎾 Chasing toys (feather wands, balls)",
+                "🧶 String and ribbon play (always supervised)",
+                "📦 Exploring boxes and tunnels",
+                "🎯 Laser pointer games (always end with catchable toy)",
+                "🧩 Simple puzzle feeders",
+                "👥 Socialization with people and other pets",
+                "🪴 Safe climbing structures",
+                "💤 Rest periods between play (kittens tire quickly)"
+            ]
+        },
+        "es": {
+            "min_playtime": "60-90 minutos por día (en sesiones cortas de 10-15 minutos)",
+            "activities": [
+                "🎾 Perseguir juguetes (varitas con plumas, pelotas)",
+                "🧶 Jugar con cuerdas y cintas (siempre supervisado)",
+                "📦 Explorar cajas y túneles",
+                "🎯 Juegos con puntero láser (siempre terminar con juguete capturable)",
+                "🧩 Comederos tipo puzzle simples",
+                "👥 Socialización con personas y otras mascotas",
+                "🪴 Estructuras seguras para trepar",
+                "💤 Períodos de descanso entre juegos (los gatitos se cansan rápido)"
+            ]
+        }
     },
     "adult": {
-        "en": "🎣 Interactive fishing rod toys • 🏃 Chase games (2-3 sessions of 10-15 min daily) • 🧠 Puzzle feeders and treat-dispensing toys • 🎾 Ball and mouse toys • 📦 Cardboard boxes for hiding • 🌿 Cat grass and safe plants to explore • 🧗 Cat trees and vertical spaces • 🎯 Hunting simulation games • 🪟 Window perches for bird watching",
-        "es": "🎣 Juguetes interactivos tipo caña de pescar • 🏃 Juegos de persecución (2-3 sesiones de 10-15 min diarios) • 🧠 Comederos tipo puzzle y juguetes dispensadores de premios • 🎾 Pelotas y ratones de juguete • 📦 Cajas de cartón para esconderse • 🌿 Hierba gatera y plantas seguras para explorar • 🧗 Árboles para gatos y espacios verticales • 🎯 Juegos de simulación de caza • 🪟 Perchas en ventanas para observar pájaros"
+        "en": {
+            "min_playtime": "30-45 minutes per day (2-3 sessions)",
+            "activities": [
+                "🎣 Interactive fishing rod toys",
+                "🏃 Chase games (10-15 min sessions)",
+                "🧠 Puzzle feeders and treat-dispensing toys",
+                "🎾 Ball and mouse toys",
+                "📦 Cardboard boxes for hiding",
+                "🌿 Cat grass and safe plants to explore",
+                "🧗 Cat trees and vertical spaces",
+                "🎯 Hunting simulation games",
+                "🪟 Window perches for bird watching"
+            ]
+        },
+        "es": {
+            "min_playtime": "30-45 minutos por día (2-3 sesiones)",
+            "activities": [
+                "🎣 Juguetes interactivos tipo caña de pescar",
+                "🏃 Juegos de persecución (sesiones de 10-15 min)",
+                "🧠 Comederos tipo puzzle y juguetes dispensadores de premios",
+                "🎾 Pelotas y ratones de juguete",
+                "📦 Cajas de cartón para esconderse",
+                "🌿 Hierba gatera y plantas seguras para explorar",
+                "🧗 Árboles para gatos y espacios verticales",
+                "🎯 Juegos de simulación de caza",
+                "🪟 Perchas en ventanas para observar pájaros"
+            ]
+        }
     },
     "senior": {
-        "en": "🐢 Gentle play sessions (5-10 minutes, multiple times daily) • 🧸 Soft toys they can bat around • 🧠 Food puzzles (easier difficulty) • 🪟 Comfortable window perches • 🌞 Warm, accessible resting spots • 🤲 Gentle petting and grooming sessions • 📻 Calm background sounds • 🎾 Slow-moving toys • ⚠️ Avoid high jumps - provide ramps/steps",
-        "es": "🐢 Sesiones de juego suaves (5-10 minutos, varias veces al día) • 🧸 Juguetes suaves que puedan golpear • 🧠 Rompecabezas de comida (dificultad más fácil) • 🪟 Perchas cómodas en ventanas • 🌞 Lugares cálidos y accesibles para descansar • 🤲 Sesiones suaves de caricias y aseo • 📻 Sonidos de fondo tranquilos • 🎾 Juguetes de movimiento lento • ⚠️ Evitar saltos altos - proporcionar rampas/escalones"
+        "en": {
+            "min_playtime": "15-20 minutes per day (multiple short sessions)",
+            "activities": [
+                "🐢 Gentle play sessions (5-10 minutes each)",
+                "🧸 Soft toys they can bat around",
+                "🧠 Food puzzles (easier difficulty)",
+                "🪟 Comfortable window perches",
+                "🌞 Warm, accessible resting spots",
+                "🤲 Gentle petting and grooming sessions",
+                "📻 Calm background sounds",
+                "🎾 Slow-moving toys",
+                "⚠️ Avoid high jumps - provide ramps/steps"
+            ]
+        },
+        "es": {
+            "min_playtime": "15-20 minutos por día (múltiples sesiones cortas)",
+            "activities": [
+                "🐢 Sesiones de juego suaves (5-10 minutos cada una)",
+                "🧸 Juguetes suaves que puedan golpear",
+                "🧠 Rompecabezas de comida (dificultad más fácil)",
+                "🪟 Perchas cómodas en ventanas",
+                "🌞 Lugares cálidos y accesibles para descansar",
+                "🤲 Sesiones suaves de caricias y aseo",
+                "📻 Sonidos de fondo tranquilos",
+                "🎾 Juguetes de movimiento lento",
+                "⚠️ Evitar saltos altos - proporcionar rampas/escalones"
+            ]
+        }
     }
 }
 
