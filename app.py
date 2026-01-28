@@ -72,6 +72,7 @@ CAT_BREEDS = {
         "description": {"en": "Sleek black coat, copper eyes, panther-like. Affectionate and social.", "es": "Pelaje negro brillante, ojos cobrizos, como pantera. Cariñosos y sociales."}
     },
 }
+
 # Full Breed List for Dropdown (Alphabetical)
 ALL_BREEDS = sorted([
     "Unknown / Mixed",
@@ -163,6 +164,22 @@ SPAY_NEUTER_INFO = {
 }
 
 # Helper Functions
+def normalize_breed_key(breed_name):
+    """Convert breed display name to dictionary key"""
+    breed_map = {
+        "Unknown / Mixed": "mixed",
+        "Maine Coon": "maine_coon",
+        "British Shorthair": "british_shorthair",
+        "Siamese": "siamese",
+        "Persian": "persian",
+        "Ragdoll": "ragdoll",
+        "Bengal": "bengal",
+        "Abyssinian": "abyssinian",
+        "Sphynx": "sphynx",
+        "Bombay": "bombay"
+    }
+    return breed_map.get(breed_name, "mixed")
+
 def cat_to_human_age(years, months=0):
     total_months = years * 12 + months
     if total_months <= 1:
@@ -250,15 +267,18 @@ def home():
             name = request.form["name"]
             years = int(request.form.get("years", 0))
             months = int(request.form.get("months", 0))
-            breed = request.form.get("breed", "mixed")
+            breed = request.form.get("breed", "Unknown / Mixed")
             weight = float(request.form.get("weight", 0))
+            
+            # Convert breed name to key for lookup
+            breed_key = normalize_breed_key(breed)
             
             human_age = cat_to_human_age(years, months)
             stage = get_life_stage(years, months)
             info = CAT_INFO[stage][lang]
             
-            weight_status = check_weight_status(weight, breed)
-            min_w, max_w = CAT_BREEDS[breed]["weight"]
+            weight_status = check_weight_status(weight, breed_key)
+            min_w, max_w = CAT_BREEDS[breed_key]["weight"]
             
             weight_message = {
                 "underweight": {"en": "⚠️ Below ideal range. Consult vet.", "es": "⚠️ Por debajo del rango ideal. Consultar veterinario."},
@@ -271,8 +291,8 @@ def home():
                 "human_age": human_age,
                 "years": years,
                 "months": months,
-                "breed": CAT_BREEDS[breed][lang],
-                "breed_description": CAT_BREEDS[breed]["description"][lang],
+                "breed": CAT_BREEDS[breed_key][lang],
+                "breed_description": CAT_BREEDS[breed_key]["description"][lang],
                 "weight": weight,
                 "weight_status": weight_status,
                 "weight_message": weight_message[weight_status][lang],
@@ -296,7 +316,7 @@ def home():
         ui=UI_TEXT,
         breeds=CAT_BREEDS,        # for medical logic
         all_breeds=ALL_BREEDS     # for dropdown
-)
+    )
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7860)
