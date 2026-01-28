@@ -149,7 +149,15 @@ def home():
         except Exception as e:
             result = {"error": True, "error_message": str(e)}
 
-    return render_template("index.html", lang=lang, result=result, ui=UI_TEXT, all_breeds=ALL_BREEDS)
+    return render_template(
+    "index.html",
+    lang=lang,
+    result=result,
+    ui=UI_TEXT,
+    breeds=CAT_BREEDS,   # <- pass the full dict for the template
+    all_breeds=ALL_BREEDS  # <- optional, can use for Choices.js ordering
+)
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7860)
