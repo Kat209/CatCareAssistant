@@ -37,7 +37,7 @@
                     <label for="breed">{{ ui.breed[lang] }}</label>
                     <select id="breed" name="breed" required>
                         {% for breed in all_breeds %}
-                        <option value="{{ breed }}">{{ breed }}</option>
+                            <option value="{{ breed }}">{{ breed }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -87,9 +87,15 @@
                     <div class="result-card weight-card">
                         <h3>⚖️ {{ ui.weight_status[lang] }}</h3>
                         <div class="weight-info">
-                            <p class="current-weight">{{ ui.weight[lang] }}: <strong>{{ result.weight }}, kg</strong></p>
-                            <p class="ideal-weight">{{ ui.ideal_weight[lang] }} <strong>{{ result.ideal_weight }}</strong></p>
-                            <p class="weight-status {{ result.weight_status }}">{{ result.weight_message }}</p>
+                            <p class="current-weight">
+                                {{ ui.weight[lang] }}: <strong>{{ result.weight }} kg</strong>
+                            </p>
+                            <p class="ideal-weight">
+                                {{ ui.ideal_weight[lang] }} <strong>{{ result.ideal_weight }}</strong>
+                            </p>
+                            <p class="weight-status {{ result.weight_status }}">
+                                {{ result.weight_message }}
+                            </p>
                         </div>
                     </div>
 
