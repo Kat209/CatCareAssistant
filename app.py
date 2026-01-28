@@ -223,6 +223,28 @@ FEEDING_RECOMMENDATIONS = {
     }
 }
 
+def get_breed_specific_games(breed_key, stage, lang):
+    """Get games tailored to breed characteristics"""
+    breed_traits = {
+        "bengal": {"en": " • 🏃‍♂️ EXTRA: High-energy breed - needs vigorous daily play and climbing!", 
+                   "es": " • 🏃‍♂️ EXTRA: Raza muy energética - ¡necesita juego vigoroso diario y trepar!"},
+        "siamese": {"en": " • 🗣️ EXTRA: Very vocal and social - interactive toys and conversation!", 
+                    "es": " • 🗣️ EXTRA: Muy vocal y social - ¡juguetes interactivos y conversación!"},
+        "persian": {"en": " • 😌 EXTRA: Calm breed - prefers gentle play and quiet environments", 
+                    "es": " • 😌 EXTRA: Raza tranquila - prefiere juego suave y ambientes tranquilos"},
+        "maine_coon": {"en": " • 🦁 EXTRA: Large and playful - sturdy toys and water play!", 
+                       "es": " • 🦁 EXTRA: Grande y juguetón - ¡juguetes resistentes y juegos con agua!"},
+        "sphynx": {"en": " • 🌡️ EXTRA: Hairless - keep warm during play, loves human interaction", 
+                   "es": " • 🌡️ EXTRA: Sin pelo - mantener caliente durante el juego, ama la interacción humana"},
+        "abyssinian": {"en": " • 🔍 EXTRA: Very curious - puzzle toys and exploring new things!", 
+                       "es": " • 🔍 EXTRA: Muy curioso - ¡juguetes tipo puzzle y explorar cosas nuevas!"},
+    }
+    
+    base_games = GAMES_ACTIVITIES[stage][lang]
+    breed_addition = breed_traits.get(breed_key, {}).get(lang, "")
+    
+    return base_games + breed_addition
+
 # Age-Appropriate Games and Activities
 GAMES_ACTIVITIES = {
     "kitten": {
@@ -401,7 +423,7 @@ def home():
                 "ideal_weight": f"{min_w} - {max_w} kg",
                 "info": info,
                 "feeding": FEEDING_RECOMMENDATIONS[stage][lang],
-                "games": GAMES_ACTIVITIES[stage][lang],
+                "games": get_breed_specific_games(breed_key, stage, lang),
                 "vaccination": get_vaccination_info(years, months, lang),
                 "deworming": get_deworming_info(years, months, lang),
                 "is_spayed": is_spayed,
