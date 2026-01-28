@@ -67,9 +67,9 @@ CAT_BREEDS = {
                                "es": "Sin pelo, cálidos al tacto, muy cariñosos y sociales. Requiere baños regulares."}}
 }
 
-# List of all breed names alphabetically for dropdown
+# Sorted breed list for dropdown, unknown/mixed first
 ALL_BREEDS = sorted([b for b in CAT_BREEDS.keys() if b != "Unknown / Mixed"])
-ALL_BREEDS.insert(0, "Unknown / Mixed")  # Ensure unknown is always first
+ALL_BREEDS.insert(0, "Unknown / Mixed")
 
 # -----------------------
 # Helper Functions
@@ -125,7 +125,6 @@ def home():
 
             human_age = cat_to_human_age(years, months)
             stage = get_life_stage(years, months)
-            info = CAT_BREEDS[breed]["description"][lang]
 
             weight_status = check_weight_status(weight, breed)
             min_w, max_w = CAT_BREEDS[breed]["weight"]
@@ -145,8 +144,7 @@ def home():
                 "weight": weight,
                 "weight_status": weight_status,
                 "weight_message": weight_message[weight_status][lang],
-                "ideal_weight": f"{min_w} - {max_w} kg",
-                "info": {"personality": info},
+                "ideal_weight": f"{min_w} - {max_w} kg"
             }
         except Exception as e:
             result = {"error": True, "error_message": str(e)}
