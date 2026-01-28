@@ -132,7 +132,15 @@
             
             <div class="result-card">
                 <h3>🎮 {{ ui.games[lang] }}</h3>
-                <p>{{ result.games }}</p>
+                <div class="playtime-highlight">
+                    <strong>⏰ {% if lang == 'en' %}Minimum daily playtime:{% else %}Tiempo mínimo de juego diario:{% endif %}</strong>
+                    <span>{{ result.games.min_playtime }}</span>
+                </div>
+                <ul class="games-list">
+                    {% for activity in result.games.activities %}
+                    <li>{{ activity }}</li>
+                    {% endfor %}
+                </ul>
             </div>
             
             <div class="result-card">
