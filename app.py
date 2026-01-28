@@ -122,41 +122,47 @@ CAT_BREEDS = {
 }
 
 # Full Breed List for Dropdown (with Spanish translations and Unknown/Mixed at top)
+ALL_BREEDS_EN = [
+    "Unknown / Mixed",
+    "Abyssinian", "Aegean", "American Bobtail", "American Curl",
+    "American Shorthair", "American Wirehair", "Balinese", "Bambino",
+    "Bengal", "Birman", "Bombay", "British Longhair", "British Shorthair",
+    "Burmese", "Burmilla", "Chartreux", "Chausie", "Colorpoint Shorthair",
+    "Cornish Rex", "Cymric", "Devon Rex", "Donskoy", "Egyptian Mau",
+    "European Burmese", "Exotic Shorthair", "German Rex", "Havana Brown",
+    "Highlander", "Himalayan", "Japanese Bobtail", "Javanese", "Khao Manee",
+    "Korat", "Kurilian Bobtail", "LaPerm", "Lykoi", "Maine Coon", "Manx",
+    "Minskin", "Munchkin", "Nebelung", "Norwegian Forest Cat", "Ocicat",
+    "Oriental Longhair", "Oriental Shorthair", "Persian", "Peterbald",
+    "Pixiebob", "Ragamuffin", "Ragdoll", "Russian Blue", "Savannah",
+    "Scottish Fold", "Selkirk Rex", "Serengeti", "Siamese", "Siberian",
+    "Singapura", "Snowshoe", "Somali", "Sphynx", "Thai", "Tonkinese",
+    "Toyger", "Turkish Angora", "Turkish Van", "Ukrainian Levkoy", "York Chocolate"
+]
+
+ALL_BREEDS_ES = [
+    "Desconocido / Mestizo",
+] + sorted([
+    "Abisinio", "Egeo", "Americano de Pelo Corto", "Americano de Pelo Duro",
+    "American Curl", "Angora Turco", "Azul Ruso", "Balinés", "Bambino",
+    "Bengalí", "Birmano", "Bobtail Americano", "Bobtail de las Kuriles",
+    "Bobtail Japonés", "Bombay", "Británico de Pelo Corto", "Británico de Pelo Largo",
+    "Burmés", "Burmés Europeo", "Burmilla", "Chartreux", "Chausie",
+    "Colorpoint de Pelo Corto", "Cornish Rex", "Cymric", "Devon Rex", "Donskoy",
+    "Esfinge", "Exótico de Pelo Corto", "Gato del Bosque de Noruega",
+    "Havana Brown", "Highlander", "Himalayo", "Javanés", "Khao Manee",
+    "Korat", "LaPerm", "Levkoy Ucraniano", "Lykoi", "Maine Coon", "Manx",
+    "Mau Egipcio", "Minskin", "Munchkin", "Nebelung", "Ocicat",
+    "Oriental de Pelo Corto", "Oriental de Pelo Largo", "Persa", "Peterbald",
+    "Pixiebob", "Ragamuffin", "Ragdoll", "Rex Alemán", "Savannah",
+    "Scottish Fold", "Selkirk Rex", "Serengeti", "Siamés", "Siberiano",
+    "Singapura", "Snowshoe", "Somalí", "Thai", "Tonkinés",
+    "Toyger", "Van Turco", "York Chocolate"
+])
+
 ALL_BREEDS = {
-    "en": [
-        "Unknown / Mixed",
-        "Abyssinian", "Aegean", "American Bobtail", "American Curl",
-        "American Shorthair", "American Wirehair", "Balinese", "Bambino",
-        "Bengal", "Birman", "Bombay", "British Longhair", "British Shorthair",
-        "Burmese", "Burmilla", "Chartreux", "Chausie", "Colorpoint Shorthair",
-        "Cornish Rex", "Cymric", "Devon Rex", "Donskoy", "Egyptian Mau",
-        "European Burmese", "Exotic Shorthair", "German Rex", "Havana Brown",
-        "Highlander", "Himalayan", "Japanese Bobtail", "Javanese", "Khao Manee",
-        "Korat", "Kurilian Bobtail", "LaPerm", "Lykoi", "Maine Coon", "Manx",
-        "Minskin", "Munchkin", "Nebelung", "Norwegian Forest Cat", "Ocicat",
-        "Oriental Longhair", "Oriental Shorthair", "Persian", "Peterbald",
-        "Pixiebob", "Ragamuffin", "Ragdoll", "Russian Blue", "Savannah",
-        "Scottish Fold", "Selkirk Rex", "Serengeti", "Siamese", "Siberian",
-        "Singapura", "Snowshoe", "Somali", "Sphynx", "Thai", "Tonkinese",
-        "Toyger", "Turkish Angora", "Turkish Van", "Ukrainian Levkoy", "York Chocolate"
-    ],
-    "es": [
-        "Desconocido / Mestizo",
-        "Abisinio", "Egeo", "Bobtail Americano", "American Curl",
-        "Americano de Pelo Corto", "Americano de Pelo Duro", "Balinés", "Bambino",
-        "Bengalí", "Birmano", "Bombay", "Británico de Pelo Largo", "Británico de Pelo Corto",
-        "Burmés", "Burmilla", "Chartreux", "Chausie", "Colorpoint de Pelo Corto",
-        "Cornish Rex", "Cymric", "Devon Rex", "Donskoy", "Mau Egipcio",
-        "Burmés Europeo", "Exótico de Pelo Corto", "Rex Alemán", "Havana Brown",
-        "Highlander", "Himalayo", "Bobtail Japonés", "Javanés", "Khao Manee",
-        "Korat", "Bobtail de las Kuriles", "LaPerm", "Lykoi", "Maine Coon", "Manx",
-        "Minskin", "Munchkin", "Nebelung", "Gato del Bosque de Noruega", "Ocicat",
-        "Oriental de Pelo Largo", "Oriental de Pelo Corto", "Persa", "Peterbald",
-        "Pixiebob", "Ragamuffin", "Ragdoll", "Azul Ruso", "Savannah",
-        "Scottish Fold", "Selkirk Rex", "Serengeti", "Siamés", "Siberiano",
-        "Singapura", "Snowshoe", "Somalí", "Esfinge", "Thai", "Tonkinés",
-        "Toyger", "Angora Turco", "Van Turco", "Levkoy Ucraniano", "York Chocolate"
-    ]
+    "en": ALL_BREEDS_EN,
+    "es": ALL_BREEDS_ES
 }
 
 # Cat Info by Life Stage
