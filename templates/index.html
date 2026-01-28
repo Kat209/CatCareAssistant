@@ -110,17 +110,15 @@
             
             <div class="result-card">
                 <h3>🍽️ {{ ui.feeding[lang] }}</h3>
-                <ul class="feeding-list">
-                    <li><strong>{{ ui.feeding_frequency[lang] }}</strong> {{ result.feeding.frequency }}</li>
-                    <li><strong>{{ ui.food_type[lang] }}</strong> {{ result.feeding.food_type }}</li>
-                    <li><strong>{{ ui.daily_calories[lang] }}</strong> {{ result.feeding.calories }}</li>
-                    <li><strong>{{ ui.daily_grams[lang] }}</strong> {{ result.feeding.grams }}</li>
-                </ul>
+                <p><strong>{{ ui.feeding_frequency[lang] }}</strong> {{ result.feeding.frequency }}</p>
+                <p><strong>{{ ui.food_type[lang] }}</strong> {{ result.feeding.food_type }}</p>
+                <p><strong>{{ ui.daily_calories[lang] }}</strong> {{ result.feeding.calories }}</p>
+                <p><strong>{{ ui.daily_grams[lang] }}</strong> {{ result.feeding.grams }}</p>
             </div>
             
             <div class="result-card">
                 <h3>🎮 {{ ui.games[lang] }}</h3>
-                <p class="games-section">{{ result.games }}</p>
+                <p>{{ result.games }}</p>
             </div>
             
             <div class="result-card">
