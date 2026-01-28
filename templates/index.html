@@ -36,8 +36,16 @@
                 <div class="form-group">
                     <label for="breed">{{ ui.breed[lang] }}</label>
                     <select id="breed" name="breed" required>
+                        <!-- Unknown / Mixed always first -->
+                        <option value="Unknown / Mixed">
+                            {% if lang == "es" %}Desconocido / Mestizo{% else %}Unknown / Mixed{% endif %}
+                        </option>
+
+                        <!-- All other breeds alphabetically -->
                         {% for breed in all_breeds %}
-                            <option value="{{ breed }}">{{ breed }}</option>
+                            {% if breed != "Unknown / Mixed" %}
+                                <option value="{{ breed }}">{{ breed }}</option>
+                            {% endif %}
                         {% endfor %}
                     </select>
                 </div>
