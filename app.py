@@ -79,6 +79,46 @@ CAT_BREEDS = {
         "en": "Bombay", "es": "Bombay", "weight": (3.0, 5.0),
         "description": {"en": "Sleek black coat, copper eyes, panther-like. Affectionate and social.", "es": "Pelaje negro brillante, ojos cobrizos, como pantera. Cariñosos y sociales."}
     },
+    "russian_blue": {
+        "en": "Russian Blue", "es": "Azul Ruso", "weight": (3.0, 5.5),
+        "description": {"en": "Quiet, gentle with silvery-blue coat. Loyal and reserved with strangers.", "es": "Tranquilos, gentiles con pelaje azul plateado. Leales y reservados con extraños."}
+    },
+    "birman": {
+        "en": "Birman", "es": "Birmano", "weight": (3.5, 6.5),
+        "description": {"en": "Gentle, affectionate with color-point coat and white paws. Very social.", "es": "Gentiles, cariñosos con pelaje color point y patas blancas. Muy sociables."}
+    },
+    "scottish_fold": {
+        "en": "Scottish Fold", "es": "Scottish Fold", "weight": (3.0, 6.0),
+        "description": {"en": "Sweet-natured with unique folded ears. Adaptable and affectionate.", "es": "De naturaleza dulce con orejas dobladas únicas. Adaptables y cariñosos."}
+    },
+    "american_shorthair": {
+        "en": "American Shorthair", "es": "Americano de Pelo Corto", "weight": (3.5, 7.0),
+        "description": {"en": "Easy-going, healthy, adaptable. Great family cats with hunting instincts.", "es": "Tranquilos, saludables, adaptables. Excelentes gatos familiares con instintos cazadores."}
+    },
+    "exotic_shorthair": {
+        "en": "Exotic Shorthair", "es": "Exótico de Pelo Corto", "weight": (3.5, 6.0),
+        "description": {"en": "Calm like Persians but with short coat. Playful and affectionate.", "es": "Tranquilos como los persas pero con pelo corto. Juguetones y cariñosos."}
+    },
+    "norwegian_forest_cat": {
+        "en": "Norwegian Forest Cat", "es": "Gato del Bosque de Noruega", "weight": (4.5, 9.0),
+        "description": {"en": "Large, sturdy with thick water-resistant coat. Friendly and patient.", "es": "Grandes, robustos con pelaje grueso resistente al agua. Amigables y pacientes."}
+    },
+    "siberian": {
+        "en": "Siberian", "es": "Siberiano", "weight": (4.5, 9.0),
+        "description": {"en": "Strong, agile with triple-layer coat. Hypoallergenic and dog-like personality.", "es": "Fuertes, ágiles con pelaje de triple capa. Hipoalergénicos con personalidad canina."}
+    },
+    "burmese": {
+        "en": "Burmese", "es": "Burmés", "weight": (3.5, 6.0),
+        "description": {"en": "Social, playful, dog-like loyalty. Muscular with silky coat.", "es": "Sociales, juguetones, lealtad tipo perro. Musculosos con pelaje sedoso."}
+    },
+    "oriental_shorthair": {
+        "en": "Oriental Shorthair", "es": "Oriental de Pelo Corto", "weight": (3.0, 5.5),
+        "description": {"en": "Elegant, intelligent, very vocal. Related to Siamese with many colors.", "es": "Elegantes, inteligentes, muy vocales. Relacionados con siameses con muchos colores."}
+    },
+    "tonkinese": {
+        "en": "Tonkinese", "es": "Tonkinés", "weight": (3.0, 5.5),
+        "description": {"en": "Active, social, affectionate. Cross between Siamese and Burmese.", "es": "Activos, sociales, cariñosos. Cruce entre siamés y burmés."}
+    },
 }
 
 # Full Breed List for Dropdown (with Spanish translations and Unknown/Mixed at top)
@@ -366,38 +406,58 @@ SPAY_NEUTER_INFO = {
 # Helper Functions
 def normalize_breed_key(breed_name, lang="en"):
     """Convert breed display name to dictionary key"""
-    # English to key mapping
-    breed_map_en = {
-        "Unknown / Mixed": "mixed",
-        "Maine Coon": "maine_coon",
-        "British Shorthair": "british_shorthair",
-        "Siamese": "siamese",
-        "Persian": "persian",
-        "Ragdoll": "ragdoll",
-        "Bengal": "bengal",
-        "Abyssinian": "abyssinian",
-        "Sphynx": "sphynx",
-        "Bombay": "bombay"
+    # Create a normalized version by converting to lowercase and replacing spaces with underscores
+    normalized = breed_name.lower().replace(" / ", "_").replace("/", "_").replace(" ", "_").replace("-", "_")
+    
+    # Direct mappings for breeds we have data for
+    breed_map = {
+        # English and Spanish common names
+        "unknown_mixed": "mixed",
+        "desconocido_mestizo": "mixed",
+        "maine_coon": "maine_coon",
+        "british_shorthair": "british_shorthair",
+        "británico_de_pelo_corto": "british_shorthair",
+        "siamese": "siamese",
+        "siamés": "siamese",
+        "persian": "persian",
+        "persa": "persian",
+        "ragdoll": "ragdoll",
+        "bengal": "bengal",
+        "bengalí": "bengal",
+        "abyssinian": "abyssinian",
+        "abisinio": "abyssinian",
+        "sphynx": "sphynx",
+        "esfinge": "sphynx",
+        "bombay": "bombay",
+        "russian_blue": "russian_blue",
+        "azul_ruso": "russian_blue",
+        "birman": "birman",
+        "birmano": "birman",
+        "scottish_fold": "scottish_fold",
+        "american_shorthair": "american_shorthair",
+        "americano_de_pelo_corto": "american_shorthair",
+        "exotic_shorthair": "exotic_shorthair",
+        "exótico_de_pelo_corto": "exotic_shorthair",
+        "norwegian_forest_cat": "norwegian_forest_cat",
+        "gato_del_bosque_de_noruega": "norwegian_forest_cat",
+        "siberian": "siberian",
+        "siberiano": "siberian",
+        "burmese": "burmese",
+        "burmés": "burmese",
+        "oriental_shorthair": "oriental_shorthair",
+        "oriental_de_pelo_corto": "oriental_shorthair",
+        "tonkinese": "tonkinese",
+        "tonkinés": "tonkinese",
     }
     
-    # Spanish to key mapping
-    breed_map_es = {
-        "Desconocido / Mestizo": "mixed",
-        "Maine Coon": "maine_coon",
-        "Británico de Pelo Corto": "british_shorthair",
-        "Siamés": "siamese",
-        "Persa": "persian",
-        "Ragdoll": "ragdoll",
-        "Bengalí": "bengal",
-        "Abisinio": "abyssinian",
-        "Esfinge": "sphynx",
-        "Bombay": "bombay"
-    }
+    # Check if we have specific data for this breed
+    result = breed_map.get(normalized)
     
-    if lang == "es":
-        return breed_map_es.get(breed_name, "mixed")
-    else:
-        return breed_map_en.get(breed_name, "mixed")
+    if result and result in CAT_BREEDS:
+        return result
+    
+    # If breed not in our detailed database, return "mixed" as default
+    return "mixed"
 
 def cat_to_human_age(years, months=0):
     total_months = years * 12 + months
