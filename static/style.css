@@ -351,3 +351,49 @@ h1 {
     background: #e9ecef;
     transform: translateX(5px);
 }
+
+/* Daily Tip Section */
+.tip-card {
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+}
+
+.tip-content {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin: 20px 0;
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tip-text {
+    font-size: 1.1em;
+    line-height: 1.8;
+    color: #333;
+    margin: 0;
+}
+
+.btn-tip {
+    width: 100%;
+    padding: 15px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-tip:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn-tip:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
