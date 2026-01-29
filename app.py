@@ -1,6 +1,12 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
+import os
+from groq import Groq
 
 app = Flask(__name__)
+
+# Groq API Configuration - Añade tu API key aquí
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")  # O pon tu key directamente: "gsk_..."
+groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
 
 # UI Text
 UI_TEXT = {
@@ -31,6 +37,9 @@ UI_TEXT = {
     "warning_signs": {"en": "Warning Signs to Watch", "es": "Señales de Alerta"},
     "games": {"en": "Age-Appropriate Games & Activities", "es": "Juegos y Actividades Apropiados para su Edad"},
     "spay_neuter": {"en": "Spay/Neuter Information", "es": "Información sobre Esterilización"},
+    "daily_tip": {"en": "Get Daily Tip", "es": "Obtener Consejo del Día"},
+    "daily_tip_title": {"en": "💡 Personalized Tip for", "es": "💡 Consejo Personalizado para"},
+    "generating": {"en": "Generating tip...", "es": "Generando consejo..."},
     "disclaimer": {
         "en": "This info is for educational purposes and not a substitute for a veterinarian.",
         "es": "Esta información es educativa y no sustituye al veterinario."
@@ -269,48 +278,6 @@ FEEDING_RECOMMENDATIONS = {
     }
 }
 
-def get_breed_specific_games(breed_key, stage, lang):
-    """Get games tailored to breed characteristics"""
-    breed_traits = {
-        "bengal": {
-            "en": "🏃‍♂️ EXTRA: High-energy breed - ADD 15-30 minutes of vigorous play daily!", 
-            "es": "🏃‍♂️ EXTRA: Raza muy energética - ¡AÑADIR 15-30 minutos de juego vigoroso diario!"
-        },
-        "siamese": {
-            "en": "🗣️ EXTRA: Very vocal and social - interactive toys and conversation time!", 
-            "es": "🗣️ EXTRA: Muy vocal y social - ¡juguetes interactivos y tiempo de conversación!"
-        },
-        "persian": {
-            "en": "😌 EXTRA: Calm breed - gentle play is enough, avoid overexertion", 
-            "es": "😌 EXTRA: Raza tranquila - juego suave es suficiente, evitar exceso de ejercicio"
-        },
-        "maine_coon": {
-            "en": "🦁 EXTRA: Large and playful - sturdy toys and water play recommended!", 
-            "es": "🦁 EXTRA: Grande y juguetón - ¡juguetes resistentes y juegos con agua recomendados!"
-        },
-        "sphynx": {
-            "en": "🌡️ EXTRA: Hairless - keep warm during play, loves human interaction", 
-            "es": "🌡️ EXTRA: Sin pelo - mantener caliente durante el juego, ama la interacción humana"
-        },
-        "abyssinian": {
-            "en": "🔍 EXTRA: Very curious - puzzle toys and exploring new things daily!", 
-            "es": "🔍 EXTRA: Muy curioso - ¡juguetes tipo puzzle y explorar cosas nuevas diariamente!"
-        },
-    }
-    
-    base_games = GAMES_ACTIVITIES[stage][lang]
-    breed_addition = breed_traits.get(breed_key, {}).get(lang, "")
-    
-    # Add breed-specific note to activities list if exists
-    activities = base_games["activities"].copy()
-    if breed_addition:
-        activities.append(breed_addition)
-    
-    return {
-        "min_playtime": base_games["min_playtime"],
-        "activities": activities
-    }
-
 # Age-Appropriate Games and Activities
 GAMES_ACTIVITIES = {
     "kitten": {
@@ -410,14 +377,53 @@ SPAY_NEUTER_INFO = {
 }
 
 # Helper Functions
+def get_breed_specific_games(breed_key, stage, lang):
+    """Get games tailored to breed characteristics"""
+    breed_traits = {
+        "bengal": {
+            "en": "🏃‍♂️ EXTRA: High-energy breed - ADD 15-30 minutes of vigorous play daily!", 
+            "es": "🏃‍♂️ EXTRA: Raza muy energética - ¡AÑADIR 15-30 minutos de juego vigoroso diario!"
+        },
+        "siamese": {
+            "en": "🗣️ EXTRA: Very vocal and social - interactive toys and conversation time!", 
+            "es": "🗣️ EXTRA: Muy vocal y social - ¡juguetes interactivos y tiempo de conversación!"
+        },
+        "persian": {
+            "en": "😌 EXTRA: Calm breed - gentle play is enough, avoid overexertion", 
+            "es": "😌 EXTRA: Raza tranquila - juego suave es suficiente, evitar exceso de ejercicio"
+        },
+        "maine_coon": {
+            "en": "🦁 EXTRA: Large and playful - sturdy toys and water play recommended!", 
+            "es": "🦁 EXTRA: Grande y juguetón - ¡juguetes resistentes y juegos con agua recomendados!"
+        },
+        "sphynx": {
+            "en": "🌡️ EXTRA: Hairless - keep warm during play, loves human interaction", 
+            "es": "🌡️ EXTRA: Sin pelo - mantener caliente durante el juego, ama la interacción humana"
+        },
+        "abyssinian": {
+            "en": "🔍 EXTRA: Very curious - puzzle toys and exploring new things daily!", 
+            "es": "🔍 EXTRA: Muy curioso - ¡juguetes tipo puzzle y explorar cosas nuevas diariamente!"
+        },
+    }
+    
+    base_games = GAMES_ACTIVITIES[stage][lang]
+    breed_addition = breed_traits.get(breed_key, {}).get(lang, "")
+    
+    # Add breed-specific note to activities list if exists
+    activities = base_games["activities"].copy()
+    if breed_addition:
+        activities.append(breed_addition)
+    
+    return {
+        "min_playtime": base_games["min_playtime"],
+        "activities": activities
+    }
+
 def normalize_breed_key(breed_name, lang="en"):
     """Convert breed display name to dictionary key"""
-    # Create a normalized version by converting to lowercase and replacing spaces with underscores
     normalized = breed_name.lower().replace(" / ", "_").replace("/", "_").replace(" ", "_").replace("-", "_")
     
-    # Direct mappings for breeds we have data for
     breed_map = {
-        # English and Spanish common names
         "unknown_mixed": "mixed",
         "desconocido_mestizo": "mixed",
         "maine_coon": "maine_coon",
@@ -456,13 +462,11 @@ def normalize_breed_key(breed_name, lang="en"):
         "tonkinés": "tonkinese",
     }
     
-    # Check if we have specific data for this breed
     result = breed_map.get(normalized)
     
     if result and result in CAT_BREEDS:
         return result
     
-    # If breed not in our detailed database, return "mixed" as default
     return "mixed"
 
 def cat_to_human_age(years, months=0):
@@ -490,13 +494,10 @@ def check_weight_status(weight, breed_key):
         breed_key = "mixed"
     min_weight, max_weight = CAT_BREEDS[breed_key]["weight"]
     
-    # Check if underweight (below minimum)
     if weight < min_weight:
         return "underweight"
-    # Check if overweight (above maximum)
     elif weight > max_weight:
         return "overweight"
-    # Within healthy range
     else:
         return "healthy"
 
@@ -560,7 +561,6 @@ def home():
             weight = float(request.form.get("weight", 0))
             is_spayed = request.form.get("spayed_neutered", "no") == "yes"
             
-            # Convert breed name to key for lookup
             breed_key = normalize_breed_key(breed, lang)
             
             human_age = cat_to_human_age(years, months)
@@ -593,7 +593,8 @@ def home():
                 "vaccination": get_vaccination_info(years, months, lang),
                 "deworming": get_deworming_info(years, months, lang),
                 "is_spayed": is_spayed,
-                "spay_neuter": SPAY_NEUTER_INFO[lang] if not is_spayed else None
+                "spay_neuter": SPAY_NEUTER_INFO[lang] if not is_spayed else None,
+                "stage": stage
             }
         except Exception as e:
             import traceback
@@ -607,8 +608,87 @@ def home():
         result=result,
         ui=UI_TEXT,
         breeds=CAT_BREEDS,
-        all_breeds=ALL_BREEDS[lang]
+        all_breeds=ALL_BREEDS[lang],
+        groq_enabled=groq_client is not None
     )
+
+@app.route("/daily-tip", methods=["POST"])
+def daily_tip():
+    """Generate a personalized daily tip using Groq AI"""
+    if not groq_client:
+        return jsonify({"error": "Groq API not configured", "success": False}), 500
+    
+    try:
+        data = request.get_json()
+        cat_name = data.get("name", "your cat")
+        breed = data.get("breed", "Mixed")
+        age_years = data.get("years", 0)
+        age_months = data.get("months", 0)
+        weight = data.get("weight", 0)
+        weight_status = data.get("weight_status", "healthy")
+        stage = data.get("stage", "adult")
+        is_spayed = data.get("is_spayed", False)
+        lang = data.get("lang", "en")
+        
+        # Build prompt
+        if lang == "es":
+            prompt = f"""Genera UN SOLO consejo práctico y personalizado para el cuidado de {cat_name}, un gato {breed} de {age_years} años y {age_months} meses que pesa {weight}kg (estado: {weight_status}).
+
+Etapa de vida: {stage}
+Esterilizado: {'Sí' if is_spayed else 'No'}
+
+El consejo debe ser:
+- Específico para esta raza y edad
+- Práctico y fácil de implementar HOY
+- Máximo 3-4 líneas
+- Amigable y motivador
+- Enfocado en UN solo tema (juego, nutrición, salud, o comportamiento)
+
+No uses formato de lista, solo escribe el consejo directo."""
+        else:
+            prompt = f"""Generate ONE practical, personalized care tip for {cat_name}, a {breed} cat who is {age_years} years and {age_months} months old, weighing {weight}kg (status: {weight_status}).
+
+Life stage: {stage}
+Spayed/Neutered: {'Yes' if is_spayed else 'No'}
+
+The tip should be:
+- Specific to this breed and age
+- Practical and actionable TODAY
+- Maximum 3-4 lines
+- Friendly and motivating
+- Focused on ONE topic (play, nutrition, health, or behavior)
+
+Don't use list format, just write the tip directly."""
+        
+        # Call Groq API
+        chat_completion = groq_client.chat.completions.create(
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You are a helpful cat care expert who gives concise, practical daily tips."
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                }
+            ],
+            model="llama-3.3-70b-versatile",
+            temperature=0.8,
+            max_tokens=200
+        )
+        
+        tip = chat_completion.choices[0].message.content.strip()
+        
+        return jsonify({
+            "tip": tip,
+            "success": True
+        })
+        
+    except Exception as e:
+        return jsonify({
+            "error": str(e),
+            "success": False
+        }), 500
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=7860)
