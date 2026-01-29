@@ -42,6 +42,7 @@ UI_TEXT = {
     "cat_name": {"en": "Cat name", "es": "Nombre del gato"},
     "age": {"en": "Age", "es": "Edad"},
     "years": {"en": "years", "es": "años"},
+    "month": {"en": "month", "es": "mes"},
     "months": {"en": "months", "es": "meses"},
     "breed": {"en": "Breed", "es": "Raza"},
     "weight": {"en": "Weight (kg)", "es": "Peso (kg)"},
@@ -278,13 +279,13 @@ FEEDING_RECOMMENDATIONS = {
     },
     "adult": {
         "en": {
-            "frequency": "2 times daily",
+            "frequency": "Twice daily",
             "food_type": "Adult cat food with balanced nutrition",
             "calories": "200-300 calories total per day (adjust for activity level)",
             "grams": "40-60 grams per day (for average 4-5kg cat)"
         },
         "es": {
-            "frequency": "2 veces al día",
+            "frequency": "Dos veces al día",
             "food_type": "Comida para gatos adultos con nutrición balanceada",
             "calories": "200-300 calorías totales por día (ajustar según actividad)",
             "grams": "40-60 gramos por día (para gato promedio de 4-5kg)"
