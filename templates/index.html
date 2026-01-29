@@ -171,11 +171,74 @@
                 <p><strong>{% if lang=="en" %}Recovery:{% else %}Recuperación:{% endif %}</strong> {{ result.spay_neuter.recovery }}</p>
             </div>
             {% endif %}
+
+            <!-- Daily Tip Section -->
+            {% if groq_enabled %}
+            <div class="result-card tip-card">
+                <h3>{{ ui.daily_tip_title[lang] }} {{ result.name }}</h3>
+                <div id="tip-content" class="tip-content">
+                    <p style="text-align: center; color: #999;">{{ ui.generating[lang] }}</p>
+                </div>
+                <button id="get-tip-btn" class="btn-tip">{{ ui.daily_tip[lang] }}</button>
+            </div>
+            {% endif %}
         </div>
         {% endif %}
         {% endif %}
         
         <p class="disclaimer">⚠️ {{ ui.disclaimer[lang] }}</p>
     </div>
+
+    {% if result and not result.get('error') and groq_enabled %}
+    <script>
+    const getTipBtn = document.getElementById('get-tip-btn');
+    const tipContent = document.getElementById('tip-content');
+    const lang = '{{ lang }}';
+    
+    const catData = {
+        name: '{{ result.name }}',
+        breed: '{{ result.breed }}',
+        years: {{ result.years }},
+        months: {{ result.months }},
+        weight: {{ result.weight }},
+        weight_status: '{{ result.weight_status }}',
+        stage: '{{ result.stage }}',
+        is_spayed: {{ 'true' if result.is_spayed else 'false' }},
+        lang: lang
+    };
+    
+    getTipBtn.addEventListener('click', async () => {
+        getTipBtn.disabled = true;
+        getTipBtn.textContent = '{{ ui.generating[lang] }}';
+        tipContent.innerHTML = '<p style="text-align: center; color: #999;">{{ ui.generating[lang] }}</p>';
+        
+        try {
+            const response = await fetch('/daily-tip', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(catData)
+            });
+            
+            const data = await response.json();
+            
+            if (data.success) {
+                tipContent.innerHTML = `<p class="tip-text">${data.tip}</p>`;
+            } else {
+                tipContent.innerHTML = `<p style="color: #dc3545;">Error: ${data.error}</p>`;
+            }
+        } catch (error) {
+            tipContent.innerHTML = `<p style="color: #dc3545;">Error: ${error.message}</p>`;
+        } finally {
+            getTipBtn.disabled = false;
+            getTipBtn.textContent = '{{ ui.daily_tip[lang] }}';
+        }
+    });
+    
+    // Auto-generate tip on page load
+    getTipBtn.click();
+    </script>
+    {% endif %}
 </body>
 </html>
