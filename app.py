@@ -2,11 +2,39 @@ from flask import Flask, render_template, request, jsonify
 import os
 from groq import Groq
 
+# Debug: Print environment check
+print("="*50)
+print("🔍 GROQ CONFIGURATION CHECK")
+print("="*50)
+groq_key_exists = "GROQ_API_KEY" in os.environ
+print(f"Secret 'GROQ_API_KEY' exists: {groq_key_exists}")
+if groq_key_exists:
+    key_preview = os.environ.get("GROQ_API_KEY", "")
+    print(f"Key preview: {key_preview[:10]}..." if len(key_preview) > 10 else "Key is too short")
+print("="*50)
+
 app = Flask(__name__)
 
-# Groq API Configuration - Añade tu API key aquí
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")  # O pon tu key directamente: "gsk_..."
-groq_client = Groq(api_key=GROQ_API_KEY) if GROQ_API_KEY else None
+# Groq API Configuration
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+groq_client = None
+
+if GROQ_API_KEY:
+    try:
+        groq_client = Groq(api_key=GROQ_API_KEY)
+        print("✅ Groq API initialized successfully!")
+        print(f"   groq_client type: {type(groq_client)}")
+    except Exception as e:
+        print(f"❌ Error initializing Groq: {e}")
+        import traceback
+        traceback.print_exc()
+else:
+    print("⚠️ Groq API key not found in environment variables")
+    print(f"   Available env vars: {list(os.environ.keys())[:10]}...")  # Show first 10 env vars
+
+print(f"🎯 groq_client is None: {groq_client is None}")
+print(f"🎯 groq_enabled will be: {groq_client is not None}")
+print("="*50)
 
 # UI Text
 UI_TEXT = {
@@ -37,8 +65,8 @@ UI_TEXT = {
     "warning_signs": {"en": "Warning Signs to Watch", "es": "Señales de Alerta"},
     "games": {"en": "Age-Appropriate Games & Activities", "es": "Juegos y Actividades Apropiados para su Edad"},
     "spay_neuter": {"en": "Spay/Neuter Information", "es": "Información sobre Esterilización"},
-    "daily_tip": {"en": "Get Daily Tip", "es": "Obtener Consejo del Día"},
-    "daily_tip_title": {"en": "💡 Personalized Tip for", "es": "💡 Consejo Personalizado para"},
+    "daily_tip": {"en": "Get Cat Curiosity", "es": "Obtener Curiosidad Felina"},
+    "daily_tip_title": {"en": "🐾 Cat Curiosities", "es": "🐾 Curiosidades Felinas"},
     "generating": {"en": "Generating tip...", "es": "Generando consejo..."},
     "disclaimer": {
         "en": "This info is for educational purposes and not a substitute for a veterinarian.",
@@ -614,7 +642,7 @@ def home():
 
 @app.route("/daily-tip", methods=["POST"])
 def daily_tip():
-    """Generate a personalized daily tip using Groq AI"""
+    """Generate interesting breed curiosities and history using Groq AI"""
     if not groq_client:
         return jsonify({"error": "Groq API not configured", "success": False}), 500
     
@@ -622,50 +650,79 @@ def daily_tip():
         data = request.get_json()
         cat_name = data.get("name", "your cat")
         breed = data.get("breed", "Mixed")
-        age_years = data.get("years", 0)
-        age_months = data.get("months", 0)
-        weight = data.get("weight", 0)
-        weight_status = data.get("weight_status", "healthy")
-        stage = data.get("stage", "adult")
-        is_spayed = data.get("is_spayed", False)
         lang = data.get("lang", "en")
         
+        # Check if it's a mixed/unknown breed
+        is_mixed = breed in ["Mixed", "Mixed/Unknown", "Mestizo", "Desconocido", "Mestizo/Desconocido", "Unknown / Mixed", "Desconocido / Mestizo"]
+        
         # Build prompt
-        if lang == "es":
-            prompt = f"""Genera UN SOLO consejo práctico y personalizado para el cuidado de {cat_name}, un gato {breed} de {age_years} años y {age_months} meses que pesa {weight}kg (estado: {weight_status}).
+        if is_mixed:
+            # General cat curiosities for mixed breeds
+            if lang == "es":
+                prompt = f"""Genera una curiosidad fascinante sobre los gatos en general para el dueño de {cat_name}. Puede ser sobre:
+- Historia de la domesticación de los gatos
+- Comportamientos únicos y sus razones evolutivas
+- Habilidades especiales (visión, audición, agilidad)
+- Datos históricos o culturales
+- Récords mundos felinos
 
-Etapa de vida: {stage}
-Esterilizado: {'Sí' if is_spayed else 'No'}
+REGLAS ESTRICTAS:
+1. DEBE empezar EXACTAMENTE con "¿Sabías que"
+2. Habla directamente al dueño (usa "tu gato" cuando sea relevante)
+3. Máximo 3-4 líneas
+4. Hazlo sorprendente e interesante
+5. NO uses formato de lista ni bullets"""
+            else:
+                prompt = f"""Generate a fascinating curiosity about cats in general for {cat_name}'s owner. It could be about:
+- History of cat domestication
+- Unique behaviors and their evolutionary reasons
+- Special abilities (vision, hearing, agility)
+- Historical or cultural facts
+- Feline world records
 
-El consejo debe ser:
-- Específico para esta raza y edad
-- Práctico y fácil de implementar HOY
-- Máximo 3-4 líneas
-- Amigable y motivador
-- Enfocado en UN solo tema (juego, nutrición, salud, o comportamiento)
-
-No uses formato de lista, solo escribe el consejo directo."""
+STRICT RULES:
+1. MUST start EXACTLY with "Did you know that"
+2. Speak directly to the owner (use "your cat" when relevant)
+3. Maximum 3-4 lines
+4. Make it surprising and interesting
+5. DO NOT use list format or bullets"""
         else:
-            prompt = f"""Generate ONE practical, personalized care tip for {cat_name}, a {breed} cat who is {age_years} years and {age_months} months old, weighing {weight}kg (status: {weight_status}).
+            # Breed-specific curiosities
+            if lang == "es":
+                prompt = f"""Genera una curiosidad fascinante sobre la raza {breed} para el dueño de {cat_name}. Puede ser sobre:
+- Origen geográfico e histórico de la raza
+- Por qué fueron criados originalmente
+- Leyendas o historias famosas sobre esta raza
+- Características únicas que los distinguen
+- Datos sorprendentes sobre su personalidad o habilidades
 
-Life stage: {stage}
-Spayed/Neutered: {'Yes' if is_spayed else 'No'}
+REGLAS ESTRICTAS:
+1. DEBE empezar EXACTAMENTE con "¿Sabías que los {breed}"
+2. Habla directamente al dueño sobre su gato {cat_name}
+3. Máximo 3-4 líneas
+4. Hazlo sorprendente e interesante
+5. NO uses formato de lista ni bullets"""
+            else:
+                prompt = f"""Generate a fascinating curiosity about the {breed} breed for {cat_name}'s owner. It could be about:
+- Geographic and historical origin of the breed
+- Why they were originally bred
+- Legends or famous stories about this breed
+- Unique characteristics that distinguish them
+- Surprising facts about their personality or abilities
 
-The tip should be:
-- Specific to this breed and age
-- Practical and actionable TODAY
-- Maximum 3-4 lines
-- Friendly and motivating
-- Focused on ONE topic (play, nutrition, health, or behavior)
-
-Don't use list format, just write the tip directly."""
+STRICT RULES:
+1. MUST start EXACTLY with "Did you know that {breed}"
+2. Speak directly to the owner about their cat {cat_name}
+3. Maximum 3-4 lines
+4. Make it surprising and interesting
+5. DO NOT use list format or bullets"""
         
         # Call Groq API
         chat_completion = groq_client.chat.completions.create(
             messages=[
                 {
                     "role": "system",
-                    "content": "You are a helpful cat care expert who gives concise, practical daily tips."
+                    "content": "You are a cat historian and breed expert who shares fascinating, lesser-known facts about cats and cat breeds. You always start with 'Did you know that' or '¿Sabías que'. You speak conversationally and never use bullet points or lists."
                 },
                 {
                     "role": "user",
@@ -673,8 +730,8 @@ Don't use list format, just write the tip directly."""
                 }
             ],
             model="llama-3.3-70b-versatile",
-            temperature=0.8,
-            max_tokens=200
+            temperature=0.9,
+            max_tokens=250
         )
         
         tip = chat_completion.choices[0].message.content.strip()
