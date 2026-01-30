@@ -73,7 +73,7 @@
                 <div class="info-grid">
                     <div class="info-item">
                         <span class="label">{{ ui.age[lang] }}:</span>
-                        <span class="value">{{ result.years }} {{ ui.years[lang] }}{% if result.months > 0 %}, {{ result.months }} {{ ui.months[lang] }}{% endif %}</span>
+                        <span class="value">{{ result.years }} {{ ui.years[lang] }}{% if result.months > 0 %}, {{ result.months }} {% if result.months == 1 %}{{ ui.month[lang] }}{% else %}{{ ui.months[lang] }}{% endif %}{% endif %}</span>
                     </div>
                     <div class="info-item">
                         <span class="label">{{ ui.human_age[lang] }}</span>
